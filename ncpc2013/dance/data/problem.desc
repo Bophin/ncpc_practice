@@ -1,0 +1,19 @@
+skip
+skip
+normal random 10 100 2 40 simple
+normal random 10 100 10 1000 simple
+normal random 10 1000 10 1000 simple
+normal random 100 1000 10000 100000 simple
+normal random 100 1000 10000 100000 simple
+normal exactly 10000 1000000000 simple
+normal random 10 100 10 1000 clever
+normal random 10 100 10 1000 clever
+normal random 10 1000 10 1000 clever
+normal random 10 1000 10 1000 clever
+normal random 100 1000 10000 100000 clever
+normal random 100 1000 10000 100000 clever
+normal exactly 10000 1000000000 clever
+skip
+skip
+skip
+normal exactly 10000 117098520 clever

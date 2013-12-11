@@ -1,0 +1,15 @@
+source: Nordic Collegiate Programming Contest 2013
+source-url: http://ncpc.idi.ntnu.no/
+author: Jaap Eldering, Christian Ledig
+license: cc by-sa
+validator_flags: float_tolerance 1e-4
+
+#limits:
+#    time_multiplier: 5
+#    time_safety_margin: 2
+#    memory: 4096
+#    output: 16
+#    compilation_time: 240
+#    validation_time: 240
+#    validation_memory: 3072
+#    validation_output: 4
