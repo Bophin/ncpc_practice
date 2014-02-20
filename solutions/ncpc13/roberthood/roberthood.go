@@ -28,27 +28,53 @@ func (pts pointSort) Less(i,j int) bool	{
 func isRight(p0,p1,p2 point) bool {
 	return ((p1.x-p0.x)*(p2.y-p0.y)-(p2.x-p0.x)*(p1.y-p0.y))<0 }
 
-//Monotone Chain Algorithm
+//Monotone Chain 
 func convexHull(pts []point) {  
 	
 	sort.Sort(pointSort(pts))
 	
 	//Lower hull
-	lh := make([]point, len(pts)/2); lh[0]=pts[0]
+	lh := make([]point, 1, len(pts)/2); lh[0]=pts[0]
+	fmt.Println(len(lh))
 	for i:=1; i<len(pts)-1; i++ {
 		if isRight(pts[0],pts[len(pts)-1],pts[i]) {
-			fmt.Println("Hello")
+			for len(lh)>=2 {
+				fmt.Println(len(lh)); fmt.Println(lh[0]); fmt.Println(lh[len(lh)-1])
+				if !isRight(lh[len(lh)-2],lh[len(lh)-1],pts[i]) {
+					break
+				} else {
+					lh = lh[0:len(lh)-1]
+				}
+			}
+			lh = append(lh,pts[i])
 		}
 	}
+	
+	
+	
+	
+	/*
 	//Upper hull
-	uh := make([]point, len(pts)/2); uh[0]=pts[len(pts)-1]
+	uh := make([]point, 1, len(pts)/2); uh[0]=pts[len(pts)-1]
 	for i:=1; i<len(pts)-1; i++ {
 		if isRight(pts[len(pts)-1],pts[0],pts[i]) {
-			fmt.Println("Hello2")
+			for len(uh)>=2 {
+				fmt.Println(len(uh)); fmt.Println(uh[0]); fmt.Println(uh[len(uh)-1])
+				if !isRight(uh[len(uh)-2],uh[len(uh)-1],pts[i]) {
+					break
+				} else {
+					uh = uh[0:len(uh)-1]
+				}
+			}
+			uh = append(uh,pts[i])
 		}
 	}
 	fmt.Println(pts)
 	fmt.Println(len(pts))
+	fmt.Println("########################")
+	//fmt.Println(uh)
+	fmt.Println(lh)
+	*/
 }
 
 func main() {
