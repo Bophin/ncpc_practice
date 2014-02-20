@@ -24,57 +24,78 @@ func (pts pointSort) Less(i,j int) bool	{
 	return pts[i].x<pts[j].x
 }
 
-//Is p2 right of the line of p0 p1? Using the 2d-cross product!
-func isRight(p0,p1,p2 point) bool {
-	return ((p1.x-p0.x)*(p2.y-p0.y)-(p2.x-p0.x)*(p1.y-p0.y))<0 }
+/*
+>0 left
+=0 on line
+<0 right
+*/
+func isLeft(p0,p1,p2 point) int {
+	return ((p1.x-p0.x)*(p2.y-p0.y)-(p2.x-p0.x)*(p1.y-p0.y)) 
+}
 
 //Monotone Chain 
-func convexHull(pts []point) {  
+func convexHull(p []point) []point { 
+	var i int
+	hull := make([]point, 0,len(p)/5); // the 5 is arbitrary 
 	
-	sort.Sort(pointSort(pts))
+	sort.Sort(pointSort(p))
+	
+	minmin := 0
+	for i=1; i<len(p)-1; i++ {
+		if p[i].x != p[minmin].x { break }
+	}
+	minmax := i-1
+	
+	if minmax == len(p)-1 {// all x == xmin
+		hull = append(hull,p[minmin], p[minmax])
+		return hull
+	}
+	
+	maxmax := len(p)-1
+	for i=len(p)-2; i>=0; i-- {
+		if p[maxmax].x != p[i].x { break }
+	}
+	maxmin := i+1
 	
 	//Lower hull
-	lh := make([]point, 1, len(pts)/2); lh[0]=pts[0]
-	fmt.Println(len(lh))
-	for i:=1; i<len(pts)-1; i++ {
-		if isRight(pts[0],pts[len(pts)-1],pts[i]) {
-			for len(lh)>=2 {
-				fmt.Println(len(lh)); fmt.Println(lh[0]); fmt.Println(lh[len(lh)-1])
-				if !isRight(lh[len(lh)-2],lh[len(lh)-1],pts[i]) {
-					break
-				} else {
-					lh = lh[0:len(lh)-1]
-				}
-			}
-			lh = append(lh,pts[i])
+	hull = append(hull, p[minmin])
+	for i=minmax+1; i<maxmin; i++ {
+		if isLeft(p[minmin], p[maxmin], p[i]) >=0 && i<maxmin {
+			continue
 		}
+		for len(hull)>=2 {
+			if isLeft(hull[len(hull)-2], hull[len(hull)-1], p[i]) > 0 {
+				break;
+			} else {
+				hull = hull[0:len(hull)-1]
+			}
+		}
+		hull = append(hull, p[i])
 	}
 	
-	
-	
-	
-	/*
 	//Upper hull
-	uh := make([]point, 1, len(pts)/2); uh[0]=pts[len(pts)-1]
-	for i:=1; i<len(pts)-1; i++ {
-		if isRight(pts[len(pts)-1],pts[0],pts[i]) {
-			for len(uh)>=2 {
-				fmt.Println(len(uh)); fmt.Println(uh[0]); fmt.Println(uh[len(uh)-1])
-				if !isRight(uh[len(uh)-2],uh[len(uh)-1],pts[i]) {
-					break
-				} else {
-					uh = uh[0:len(uh)-1]
-				}
-			}
-			uh = append(uh,pts[i])
-		}
+	if maxmax != maxmin {
+		hull = append(hull, p[maxmax])
 	}
-	fmt.Println(pts)
-	fmt.Println(len(pts))
-	fmt.Println("########################")
-	//fmt.Println(uh)
-	fmt.Println(lh)
-	*/
+	bot := len(hull)
+	for i=maxmin-1; i>minmax; i-- {
+		if isLeft(p[maxmax], p[minmax], p[i]) >= 0 && i>minmax {
+			continue
+		}
+		for len(hull)>=(bot+2) {
+			if isLeft(hull[len(hull)-2], hull[len(hull)-1], p[i]) > 0 {
+				break;
+			} else {
+				hull = hull[0:len(hull)-1]
+			}
+		}
+		hull = append(hull, p[i])
+	}
+	if minmax != minmin {
+		hull = append(hull, p[minmin])
+	}
+	fmt.Println(hull)
+	return hull
 }
 
 func main() {
